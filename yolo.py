@@ -20,13 +20,14 @@ from keras.utils import multi_gpu_model
 
 class YOLO(object):
     _defaults = {
-        "model_path": 'model_data/yolo.h5',
+        # "model_path": 'model_data/yolo.h5',
+        "model_path": 'model_data/derived_model.h5',         # to test the derived model
         "anchors_path": 'model_data/yolo_anchors.txt',
         "classes_path": 'model_data/coco_classes.txt',
         "score" : 0.3,
         "iou" : 0.45,
         "model_image_size" : (416, 416),
-        "gpu_num" : 1,
+        "gpu_num" : 0,
     }
 
     @classmethod
@@ -73,9 +74,11 @@ class YOLO(object):
                 if is_tiny_version else yolo_body(Input(shape=(None,None,3)), num_anchors//3, num_classes)
             self.yolo_model.load_weights(self.model_path) # make sure model, anchors and classes match
         else:
-            assert self.yolo_model.layers[-1].output_shape[-1] == \
-                num_anchors/len(self.yolo_model.output) * (num_classes + 5), \
-                'Mismatch between model and given anchor and class sizes'
+            print('output_shape = %d' %(self.yolo_model.layers[-1].output_shape[-1]))
+            print('num_anchors = %d' % num_anchors)
+            print('len = %d' %(len(self.yolo_model.output) * (num_classes + 5)))
+            print('len_output = %d' %(len(self.yolo_model.output)))
+            assert self.yolo_model.layers[-1].output_shape[-1] == num_anchors/len(self.yolo_model.output) * (num_classes + 5), 'Mismatch between model and given anchor and class sizes'
 
         print('{} model, anchors, and classes loaded.'.format(model_path))
 

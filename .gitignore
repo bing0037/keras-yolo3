@@ -1,9 +1,11 @@
+VOCdevkit/*
 *.jpg
 *.png
 *.weights
 *.h5
 logs/
 *_test.py
+2007*.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
