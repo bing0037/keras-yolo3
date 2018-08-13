@@ -20,10 +20,12 @@ from keras.utils import multi_gpu_model
 
 class YOLO(object):
     _defaults = {
-        # "model_path": 'model_data/yolo.h5',
-        "model_path": 'model_data/derived_model.h5',         # to test the derived model
+        # "model_path": 'model_data/yolo.h5',                   # 0 original yolo model
+        # "model_path": 'model_data/derived_model.h5',         # 1 to test the derived model for coco-dataset
+        "model_path": 'model_data/raccoon_derived_model.h5',           # 2-1) to test the raccoon_dataset_derived_model
         "anchors_path": 'model_data/yolo_anchors.txt',
-        "classes_path": 'model_data/coco_classes.txt',
+        # "classes_path": 'model_data/coco_classes.txt',
+        "classes_path": 'Raccoon_dataset/raccoon_classes.txt',         # 2-2) to test the raccoon_dataset_derived_model
         "score" : 0.3,
         "iou" : 0.45,
         "model_image_size" : (416, 416),

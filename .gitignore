@@ -1,4 +1,5 @@
-VOCdevkit/*
+VOCdevkit/
+Raccoon_dataset/
 *.jpg
 *.png
 *.weights
@@ -6,6 +7,8 @@ VOCdevkit/*
 logs/
 *_test.py
 2007*.txt
+model_data/*.h5
+test_data/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
