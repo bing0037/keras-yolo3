@@ -1,99 +1,77 @@
 # keras-yolo3
 
-[![license](https://img.shields.io/github/license/mashape/apistatus.svg)](LICENSE)
-
 ## Introduction
 
-A Keras implementation of YOLOv3 (Tensorflow backend) inspired by [allanzelener/YAD2K](https://github.com/allanzelener/YAD2K).
+A keras implementation of YOLOv3 (Tensorflow backend) for raccoon detection (ref: [qqwweee/keras-yolo3](https://github.com/qqwweee/keras-yolo3))
 
 
----
+## Raccoon dataset
 
-## Quick Start
+Raccoon dataset is avaiable here: [Raccoon dataset](https://github.com/bing0037/Raccoon_dataset) (modified from [experiencor/raccoon_dataset](https://github.com/experiencor/raccoon_dataset))
 
-1. Download YOLOv3 weights from [YOLO website](http://pjreddie.com/darknet/yolo/).
-2. Convert the Darknet YOLO model to a Keras model.
-3. Run YOLO detection.
+![Raccoon](pictures/raccoon-28.jpg)
 
+## How to use:
+
+### 1) Get the model
+
+Step 1: Download the project:
 ```
-wget https://pjreddie.com/media/files/yolov3.weights
-python convert.py yolov3.cfg yolov3.weights model_data/yolo.h5
-python yolo_video.py [OPTIONS...] --image, for image detection mode, OR
-python yolo_video.py [video_path] [output_path (optional)]
+git clone https://github.com/bing0037/keras-yolo3.git
 ```
 
-For Tiny YOLOv3, just do in a similar way, just specify model path and anchor path with `--model model_file` and `--anchors anchor_file`.
+Step 2: Download YOLOv3 weights from [YOLO website](http://pjreddie.com/darknet/yolo/) or [yolov3.weights](https://drive.google.com/uc?id=1owAyOwfpwxpbs0BLWPkwT0srRUTpFHIn&export=download).
 
-### Usage
-Use --help to see usage of yolo_video.py:
+Step 3: Convert the Darknet YOLO model to a Keras model 
 ```
-usage: yolo_video.py [-h] [--model MODEL] [--anchors ANCHORS]
-                     [--classes CLASSES] [--gpu_num GPU_NUM] [--image]
-                     [--input] [--output]
-
-positional arguments:
-  --input        Video input path
-  --output       Video output path
-
-optional arguments:
-  -h, --help         show this help message and exit
-  --model MODEL      path to model weight file, default model_data/yolo.h5
-  --anchors ANCHORS  path to anchor definitions, default
-                     model_data/yolo_anchors.txt
-  --classes CLASSES  path to class definitions, default
-                     model_data/coco_classes.txt
-  --gpu_num GPU_NUM  Number of GPU to use, default 1
-  --image            Image detection mode, will ignore all positional arguments
+python convert.py yolov3.cfg yolov3.weights model_data/yolo.h5	# to get yolo.h5(model)
 ```
----
 
-4. MultiGPU usage: use `--gpu_num N` to use N GPUs. It is passed to the [Keras multi_gpu_model()](https://keras.io/utils/#multi_gpu_model).
+**OR** download the model [yolo.h5](https://drive.google.com/uc?export=download&confirm=8R0l&id=1Dd-uUhhXvosXiIIZM8tiXoZyENJxIY4u) to *model_data/* directory directly.
 
-## Training
+### 2) Test the model on coco dataset(original yolo model is trained on coco dataset)
+Run YOLO detecion.
+```
+python yolo_video.py --model_path model_data/yolo.h5 --classes_path model_data/coco_classes.txt --image
+```
 
-1. Generate your own annotation file and class names file.  
-    One row for one image;  
-    Row format: `image_file_path box1 box2 ... boxN`;  
-    Box format: `x_min,y_min,x_max,y_max,class_id` (no space).  
-    For VOC dataset, try `python voc_annotation.py`  
-    Here is an example:
-    ```
-    path/to/img1.jpg 50,100,150,200,0 30,50,200,120,3
-    path/to/img2.jpg 120,300,250,600,2
-    ...
-    ```
+![Raccoon](pictures/coco_1.png)
 
-2. Make sure you have run `python convert.py -w yolov3.cfg yolov3.weights model_data/yolo_weights.h5`  
-    The file model_data/yolo_weights.h5 is used to load pretrained weights.
+### 3) Retrain the model for raccoon detection:
+Step 1: Download Raccoon dataset to root directory
+```
+git clone https://github.com/bing0037/Raccoon_dataset.git
+```
+Step 2: Parse annotation:
+```
+python raccoon_annotation.py
+```
+Step 3: Download YOLOv3 weights from [yolo_weights](https://drive.google.com/uc?export=download&confirm=-b_7&id=1HlydiovCtnUJabQvZIbx77v6sE4OXrac) to *model_data/* directory
 
-3. Modify train.py and start training.  
-    `python train.py`  
-    Use your trained weights or checkpoint weights with command line option `--model model_file` when using yolo_video.py
-    Remember to modify class path or anchor path, with `--classes class_file` and `--anchors anchor_file`.
+Step 4: Retrain the model(use yolo.h5 as the pretrained model) 
+```
+python train.py
+```
 
-If you want to use original pretrained weights for YOLOv3:  
-    1. `wget https://pjreddie.com/media/files/darknet53.conv.74`  
-    2. rename it as darknet53.weights  
-    3. `python convert.py -w darknet53.cfg darknet53.weights model_data/darknet53_weights.h5`  
-    4. use model_data/darknet53_weights.h5 in train.py
+**OR** download the trained model [raccoon_derived_model.h5](https://drive.google.com/uc?export=download&confirm=6pCi&id=1mdSiioui7H8pskBCMrE08jo-0saIf-y-) to *model_data/* directory directly.
 
----
+Step 5: Run the model
+```
+python yolo_video.py --image
+```
 
-## Some issues to know
+## Raccoon detection result
+
+![Raccoon](pictures/raccoon_detection_1.png)
+
+![Raccoon](pictures/raccoon_detection_2.png)
+
+
+## Some issues
 
 1. The test environment is
-    - Python 3.5.2
-    - Keras 2.1.5
+    - Python 3.5.5
+    - Keras 2.2.0
     - tensorflow 1.6.0
 
-2. Default anchors are used. If you use your own anchors, probably some changes are needed.
-
-3. The inference result is not totally the same as Darknet but the difference is small.
-
-4. The speed is slower than Darknet. Replacing PIL with opencv may help a little.
-
-5. Always load pretrained weights and freeze layers in the first stage of training. Or try Darknet training. It's OK if there is a mismatch warning.
-
-6. The training strategy is for reference only. Adjust it according to your dataset and your goal. And add further strategy if needed.
-
-7. For speeding up the training process with frozen layers train_bottleneck.py can be used. It will compute the bottleneck features of the frozen model first and then only trains the last layers. This makes training on CPU possible in a reasonable time. See [this](https://blog.keras.io/building-powerful-image-classification-models-using-very-little-data.html) for more information on bottleneck features.
+2. The model for raccoon detection was trained using ONLY CPU, so the accuracy is not very high. If you want to achieve a better performance, you can use GPUs for training.

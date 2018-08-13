@@ -1,7 +1,5 @@
 VOCdevkit/
 Raccoon_dataset/
-*.jpg
-*.png
 *.weights
 *.h5
 logs/
