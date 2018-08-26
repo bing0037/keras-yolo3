@@ -60,6 +60,21 @@ Step 5: Run the model
 python yolo_video.py --image
 ```
 
+### 4) pedestrian detection: training dataset: [Robust Multi-Person Tracking from Mobile Platforms](https://data.vision.ee.ethz.ch/cvl/aess/dataset/)
+
+More training data is needed to improve the accuracy!
+
+Step1: training:
+```
+python train.py
+```
+Step2: running:
+```
+python yolo_video.py --model_path model_data/pedestrian_detection_model.h5 --classes_path test_data/training_data/pedestrian_classes.txt
+```
+
+Pedestrian detection result: [Yotube](https://youtu.be/yxeetjk22K0)
+
 ## Raccoon detection result
 
 ![Raccoon](pictures/raccoon_detection_1.png)

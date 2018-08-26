@@ -15,9 +15,9 @@ from yolo3.utils import get_random_data
 from keras.utils import plot_model  # plot model
 
 def _main():
-    annotation_path = 'Raccoon_dataset/raccoon_train_data.txt'
+    annotation_path = 'test_data/training_data/annotation.txt'
     log_dir = 'logs/000/'
-    classes_path = 'Raccoon_dataset/raccoon_classes.txt'
+    classes_path = 'test_data/training_data/pedestrian_classes.txt'
     anchors_path = 'model_data/yolo_anchors.txt'
     class_names = get_classes(classes_path)
     num_classes = len(class_names)
@@ -69,7 +69,7 @@ def _main():
                 steps_per_epoch=max(1, num_train//batch_size),
                 validation_data=data_generator_wrapper(lines[num_train:], batch_size, input_shape, anchors, num_classes),
                 validation_steps=max(1, num_val//batch_size),
-                epochs=10,
+                epochs=50,
                 initial_epoch=0,
                 callbacks=[logging, checkpoint])
         # model.save_weights(log_dir + 'trained_weights_stage_1.h5')
@@ -89,8 +89,8 @@ def _main():
             steps_per_epoch=max(1, num_train//batch_size),
             validation_data=data_generator_wrapper(lines[num_train:], batch_size, input_shape, anchors, num_classes),
             validation_steps=max(1, num_val//batch_size),
-            epochs=10,
-            initial_epoch=0,
+            epochs=100,
+            initial_epoch=50,
             callbacks=[logging, checkpoint, reduce_lr, early_stopping])
         # model.save_weights(log_dir + 'trained_weights_final.h5')
         # model.save(log_dir + 'trained_model_final.h5')
@@ -111,8 +111,8 @@ def _main():
 
     # save the derived model for detection(using yolo_video.py)
     derived_model = Model(model.input[0], [model.layers[249].output, model.layers[250].output, model.layers[251].output])
-    plot_model(derived_model, to_file='model_data/raccoon_derived_model.png', show_shapes = True)
-    derived_model.save('./model_data/raccoon_derived_model.h5')
+    plot_model(derived_model, to_file='model_data/pedestrian_detection_model.png', show_shapes = True)
+    derived_model.save('./model_data/pedestrian_detection_model.h5')
 
 
 def get_classes(classes_path):
