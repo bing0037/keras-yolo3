@@ -64,7 +64,7 @@ python yolo_video.py --image
 
 More training data is needed to improve the accuracy!
 
-Step1: training:
+Step1: training or download the model directly [pedestrian_detection_model.h5](https://drive.google.com/file/d/1scu2PQeEnTvvIIZw9IYZHaVLFMhnbHqm/view?usp=sharing):
 ```
 python train.py
 ```
