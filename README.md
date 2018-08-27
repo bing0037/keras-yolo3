@@ -50,7 +50,7 @@ Step 3: Download YOLOv3 weights from [yolo_weights](https://drive.google.com/uc?
 
 Step 4: Retrain the model(use yolo.h5 as the pretrained model) 
 ```
-python train.py
+python train.py -a Raccoon_dataset/raccoon_train_data.txt -c Raccoon_dataset/raccoon_classes.txt -o model_data/raccoon_derived_model.h5
 ```
 
 **OR** download the trained model [raccoon_derived_model.h5](https://drive.google.com/uc?export=download&confirm=6pCi&id=1mdSiioui7H8pskBCMrE08jo-0saIf-y-) to *model_data/* directory directly.
@@ -66,7 +66,7 @@ More training data is needed to improve the accuracy!
 
 Step1: training or download the model directly [pedestrian_detection_model.h5](https://drive.google.com/file/d/1scu2PQeEnTvvIIZw9IYZHaVLFMhnbHqm/view?usp=sharing):
 ```
-python train.py
+python train.py -a test_data/training_data/annotation.txt -c test_data/training_data/pedestrian_classes.txt -o model_data/pedestrian_detection_model.h5
 ```
 Step2: running:
 ```

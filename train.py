@@ -14,14 +14,18 @@ from yolo3.utils import get_random_data
 
 from keras.utils import plot_model  # plot model
 
-def _main():
-    annotation_path = 'test_data/training_data/annotation.txt'
+import argparse
+
+def _main(annotation_path, classes_path, output_model_path):
+    # return
+    annotation_path = annotation_path
     log_dir = 'logs/000/'
-    classes_path = 'test_data/training_data/pedestrian_classes.txt'
+    classes_path = classes_path
     anchors_path = 'model_data/yolo_anchors.txt'
     class_names = get_classes(classes_path)
     num_classes = len(class_names)
     anchors = get_anchors(anchors_path)
+    
 
     input_shape = (416,416) # multiple of 32, hw
 
@@ -111,8 +115,8 @@ def _main():
 
     # save the derived model for detection(using yolo_video.py)
     derived_model = Model(model.input[0], [model.layers[249].output, model.layers[250].output, model.layers[251].output])
-    plot_model(derived_model, to_file='model_data/pedestrian_detection_model.png', show_shapes = True)
-    derived_model.save('./model_data/pedestrian_detection_model.h5')
+    plot_model(derived_model, to_file=output_model_path[:-3]+'.png', show_shapes = True)
+    derived_model.save(output_model_path)
 
 
 def get_classes(classes_path):
@@ -217,4 +221,17 @@ def data_generator_wrapper(annotation_lines, batch_size, input_shape, anchors, n
     return data_generator(annotation_lines, batch_size, input_shape, anchors, num_classes)
 
 if __name__ == '__main__':
-    _main()
+    
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument("-a", "--annotation_path", type=str, default='test_data/training_data/annotation.txt', help="input annotation_path")
+    parser.add_argument("-c", "--classes_path", type=str, default='test_data/training_data/pedestrian_classes.txt', help="input classes_path")
+    parser.add_argument("-o", "--output_model_path", type=str, default='model_data/pedestrian_model.h5', help="input output_model_path")
+    args = parser.parse_args()
+    print('annotation_path = ', args.annotation_path)
+    print('classes_path = ', args.classes_path)
+    print('output_model_path = ', args.output_model_path)
+
+    _main(args.annotation_path, args.classes_path, args.output_model_path)
+
+
