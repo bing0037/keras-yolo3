@@ -13,7 +13,8 @@ def detect_img(yolo):
             continue
         else:
             r_image = yolo.detect_image(image)
-            r_image.show()
+            # r_image.show()
+            r_image.save('pitures/test_result.jpg')
     yolo.close_session()
 
 FLAGS = None
